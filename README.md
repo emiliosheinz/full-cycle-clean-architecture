@@ -15,6 +15,7 @@ Clean Architecture distinguishes between inputs and outputs to define the flow o
 An API request, for example, can be considered as an input that must traverse through the innermost layer of the system, where the business logic is situated. It passes through each layer of the system before the response, as an output, travels back through all the layers in the opposite direction.
 
 **Request:** Web -> Controller -> Use Case -> Entity
+
 **Response:** Entity -> Use Case -> Controller -> Web
 
 ## Use Cases
