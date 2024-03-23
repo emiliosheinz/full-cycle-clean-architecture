@@ -31,3 +31,9 @@ Use Cases are a fundamental component of Clean Architecture, they represent dist
 - **Input and Output:** Use Cases define clear inputs (requests or commands) and outputs (responses or results) that enable communication with the external layers. This separation ensures that use cases remain agnostic of the presentation or data access mechanisms.
 
 - **Encapsulation of Business Rules:** Business rules and domain logic are encapsulated within the use cases, ensuring that they are centrally managed and consistent across the application. This promotes a clear separation of concerns and enhances the maintainability of the system.
+
+## DTO (Data Transfer Object)
+
+Data Transfer Objects (DTOs) are used to transfer data between different layers of the system, such as the presentation layer, application layer, and data access layer. DTOs encapsulate data and provide a structured format for exchanging information, enabling seamless communication between components without exposing internal details. By defining DTOs with specific attributes and properties, Clean Architecture ensures that data is transferred efficiently and consistently across different layers of the system.
+
+> 🚨 DTOs are typically anemic objects that contain only data and no behavior, this means they will not validate themselves or perform any operations.
