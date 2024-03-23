@@ -50,3 +50,9 @@ output = CreateCategoryUseCase.execute(input);
 jsonResult = new CategoryPresenter(output).toJson();
 xmlResult = new CategoryPresenter(output).toXml();
 ```
+
+## What's the difference between Clean Architecture Entities and DDD Entities?
+
+Clean Architecture defines Entities as a layer that holds the enterprise and business rules and DDD defines it as something unique within a specific domain. In summary, while both Clean Architecture and DDD emphasize the importance of entities as central to the business logic, Clean Architecture entities tend to be more focused on purity and independence from technical concerns, whereas DDD entities are deeply integrated with the domain model and express domain-specific behaviors and relationships.
+
+Also, it is important to mention that there is nothing blocking you from applying Domain Driven Design concepts within Clean Architecture, in fact, they can be complementary. Therefore, we could understand Clean Architecture Entities layer as the place where we put Aggregates, Domain Services, Domain Events, and Domain Entities.
