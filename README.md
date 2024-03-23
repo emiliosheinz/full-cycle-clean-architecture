@@ -37,3 +37,16 @@ Use Cases are a fundamental component of Clean Architecture, they represent dist
 Data Transfer Objects (DTOs) are used to transfer data between different layers of the system, such as the presentation layer, application layer, and data access layer. DTOs encapsulate data and provide a structured format for exchanging information, enabling seamless communication between components without exposing internal details. By defining DTOs with specific attributes and properties, Clean Architecture ensures that data is transferred efficiently and consistently across different layers of the system.
 
 > 🚨 DTOs are typically anemic objects that contain only data and no behavior, this means they will not validate themselves or perform any operations.
+
+## Presenters
+
+Presenters are responsible for formatting and presenting data to the user in a specific format or layout. They encapsulate the logic for transforming raw data into a user-friendly representation, such as JSON, or XML. By separating presentation logic from business logic, Clean Architecture ensures that the system remains flexible and adaptable to different user interfaces and output formats.
+
+Example:
+
+```
+input = new CategoryInputDTO("name");
+output = CreateCategoryUseCase.execute(input);
+jsonResult = new CategoryPresenter(output).toJson();
+xmlResult = new CategoryPresenter(output).toXml();
+```
