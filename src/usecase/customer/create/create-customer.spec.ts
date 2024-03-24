@@ -34,6 +34,4 @@ describe('Create customer use case', () => {
 
     expect(actualOutput).toEqual(expectedOutput)
   })
-
-  it('should throw an error ')
 })
