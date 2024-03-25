@@ -3,6 +3,8 @@ import { CustomerFactory } from '../../../domain/customer/factory/customer.facto
 import { Address } from '../../../domain/customer/value-object/address'
 import { InputUpdateCustomerDto } from './update-customer.dto'
 import { UpdateCustomerUseCase } from './update-customer.usecase'
+import { MockRepository } from '../../../test/utils'
+import { Customer } from '../../../domain/customer/entity/customer'
 
 const address = new Address({
   city: faker.location.city(),
@@ -28,16 +30,9 @@ const input: InputUpdateCustomerDto = {
   },
 }
 
-const MockRepository = () => ({
-  findAll: jest.fn(),
-  create: jest.fn(),
-  update: jest.fn(),
-  find: jest.fn(),
-})
-
 describe('Update customer use case', () => {
   it('should update a customer', async () => {
-    const repository = MockRepository()
+    const repository = MockRepository<Customer>()
     repository.find.mockResolvedValue(customer)
     const updateCustomerUseCase = new UpdateCustomerUseCase(repository)
 
@@ -47,7 +42,7 @@ describe('Update customer use case', () => {
   })
 
   it('should throw an error when customer not found', async () => {
-    const repository = MockRepository()
+    const repository = MockRepository<Customer>()
     repository.find.mockImplementation(() => {
       throw new Error('Customer not found')
     })

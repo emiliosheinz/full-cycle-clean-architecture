@@ -2,6 +2,9 @@ import { faker } from '@faker-js/faker'
 import { CustomerFactory } from '../../../domain/customer/factory/customer.factory'
 import { Address } from '../../../domain/customer/value-object/address'
 import { ListCustomerUseCase } from './list-customer.usecase'
+import { MockRepository } from '../../../test/utils'
+import { Product } from '../../../domain/product/entity/product'
+import { Customer } from '../../../domain/customer/entity/customer'
 
 const customer1 = CustomerFactory.createWithAddress(
   faker.person.fullName(),
@@ -24,16 +27,9 @@ const customer2 = CustomerFactory.createWithAddress(
   })
 )
 
-const MockRepository = () => ({
-  findAll: jest.fn(),
-  create: jest.fn(),
-  update: jest.fn(),
-  find: jest.fn(),
-})
-
 describe('List customer use case', () => {
   it('should list all customers', async () => {
-    const repository = MockRepository()
+    const repository = MockRepository<Customer>()
     repository.findAll.mockResolvedValue([customer1, customer2])
     const listCustomerUseCase = new ListCustomerUseCase(repository)
 

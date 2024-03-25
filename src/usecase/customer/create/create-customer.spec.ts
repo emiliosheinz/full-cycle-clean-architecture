@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker'
 import { InputCreateCustomerDto } from './create-customer.dto'
 import { CreateCustomerUseCase } from './create-customer.usecase'
+import { MockRepository } from '../../../test/utils'
+import { Customer } from '../../../domain/customer/entity/customer'
 
 const input: InputCreateCustomerDto = {
   name: faker.person.fullName(),
@@ -13,16 +15,9 @@ const input: InputCreateCustomerDto = {
   },
 }
 
-const MockRepository = () => ({
-  find: jest.fn(),
-  findAll: jest.fn(),
-  create: jest.fn(),
-  update: jest.fn(),
-})
-
 describe('Create customer use case', () => {
   it('should create a customer', async () => {
-    const customerRepository = MockRepository()
+    const customerRepository = MockRepository<Customer>()
     const createCustomerUseCase = new CreateCustomerUseCase(customerRepository)
 
     const expectedOutput = {
