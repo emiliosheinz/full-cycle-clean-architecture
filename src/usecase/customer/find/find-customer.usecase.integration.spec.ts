@@ -5,25 +5,11 @@ import { Customer } from '../../../domain/customer/entity/customer'
 import { faker } from '@faker-js/faker'
 import { Address } from '../../../domain/customer/value-object/address'
 import { FindCustomerUseCase } from './find-customer.usecase'
+import { setupSequelize } from '../../../test/utils'
+
+setupSequelize([CustomerModel])
 
 describe('Find customer use case', () => {
-  let sequelize: Sequelize
-
-  beforeEach(async () => {
-    sequelize = new Sequelize({
-      dialect: 'sqlite',
-      storage: ':memory:',
-      logging: false,
-      sync: { force: true },
-    })
-    sequelize.addModels([CustomerModel])
-    await sequelize.sync()
-  })
-
-  afterEach(async () => {
-    await sequelize.close()
-  })
-
   it('should find a customer', async () => {
     const customerRepository = new CustomerRepository()
     const findCustomerUseCase = new FindCustomerUseCase(customerRepository)

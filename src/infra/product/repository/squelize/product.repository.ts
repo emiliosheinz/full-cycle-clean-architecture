@@ -19,7 +19,10 @@ export class ProductRepository implements ProductRepositoryInterface {
   }
 
   async find(id: string): Promise<Product> {
-    const productModel = await ProductModel.findOne({ where: { id } })
+    const productModel = await ProductModel.findOne({
+      where: { id },
+      rejectOnEmpty: true,
+    })
     return new Product(productModel.id, productModel.name, productModel.price)
   }
 
