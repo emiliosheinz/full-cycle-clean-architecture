@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express'
 import { CreateCustomerUseCase } from '../../../usecase/customer/create/create-customer.usecase'
 import { CustomerRepository } from '../../customer/repository/squelize/customer.repository'
 import { InputCreateCustomerDto } from '../../../usecase/customer/create/create-customer.dto'
+import { ListCustomerUseCase } from '../../../usecase/customer/list/list-customer.usecase'
 
 export const customerRoute = Router()
 
@@ -20,6 +21,17 @@ customerRoute.post('/', async (req: Request, res: Response) => {
       },
     }
     const output = await createCustomerUseCase.execute(customerDto)
+    res.status(200).send(output)
+  } catch (error) {
+    res.status(400).send(error)
+  }
+})
+
+customerRoute.get('/', async (_: Request, res: Response) => {
+  try {
+    const customerRepository = new CustomerRepository()
+    const listCustomerUseCase = new ListCustomerUseCase(customerRepository)
+    const output = await listCustomerUseCase.execute({})
     res.status(200).send(output)
   } catch (error) {
     res.status(400).send(error)

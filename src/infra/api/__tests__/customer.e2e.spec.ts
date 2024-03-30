@@ -1,6 +1,18 @@
 import request from 'supertest'
 import { app, sequelize } from '../express'
 import { faker } from '@faker-js/faker'
+import { InputCreateCustomerDto } from '../../../usecase/customer/create/create-customer.dto'
+
+const makeInputCreateCustomerDto = (): InputCreateCustomerDto => ({
+  name: faker.person.fullName(),
+  address: {
+    street: faker.location.street(),
+    number: faker.number.int(),
+    city: faker.location.city(),
+    state: faker.location.state(),
+    zip: faker.location.zipCode(),
+  },
+})
 
 describe('Customer E2E', () => {
   beforeEach(async () => {
@@ -12,16 +24,7 @@ describe('Customer E2E', () => {
   })
 
   it('should create a customer', async () => {
-    const params = {
-      name: faker.person.fullName(),
-      address: {
-        street: faker.location.street(),
-        number: faker.number.int(),
-        city: faker.location.city(),
-        state: faker.location.state(),
-        zip: faker.location.zipCode(),
-      },
-    }
+    const params = makeInputCreateCustomerDto()
 
     const response = await request(app).post('/customers').send(params)
 
@@ -43,5 +46,23 @@ describe('Customer E2E', () => {
   it('should not create a customer when no params are provided', async () => {
     const response = await request(app).post('/customers').send({})
     expect(response.status).toBe(400)
+  })
+
+  it('should list all customers', async () => {
+    const firstCustomer = makeInputCreateCustomerDto()
+    const secondCustomer = makeInputCreateCustomerDto()
+
+    await request(app).post('/customers').send(firstCustomer)
+    await request(app).post('/customers').send(secondCustomer)
+
+    const response = await request(app).get('/customers').send()
+    const expectedCustomers = [
+      { id: expect.any(String), ...firstCustomer },
+      { id: expect.any(String), ...secondCustomer },
+    ]
+
+    expect(response.status).toBe(200)
+    expect(response.body.customers.length).toBe(2)
+    expect(response.body.customers).toEqual(expectedCustomers)
   })
 })
