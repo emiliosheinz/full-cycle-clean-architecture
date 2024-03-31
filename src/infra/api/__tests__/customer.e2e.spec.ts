@@ -48,7 +48,7 @@ describe('Customer E2E', () => {
     expect(response.status).toBe(400)
   })
 
-  it('should list all customers', async () => {
+  it('should list all customers in json', async () => {
     const firstCustomer = makeInputCreateCustomerDto()
     const secondCustomer = makeInputCreateCustomerDto()
 
@@ -64,5 +64,34 @@ describe('Customer E2E', () => {
     expect(response.status).toBe(200)
     expect(response.body.customers.length).toBe(2)
     expect(response.body.customers).toEqual(expectedCustomers)
+  })
+
+  it('should list all customers in xml', async () => {
+    const customer = makeInputCreateCustomerDto()
+
+    await request(app).post('/customers').send(customer)
+
+    const response = await request(app)
+      .get('/customers')
+      .set('Accept', 'application/xml')
+      .send()
+
+    expect(response.status).toBe(200)
+    expect(response.text).toContain('<?xml version="1.0" encoding="UTF-8"?>')
+    expect(response.text).toContain('<customers>')
+    expect(response.text).toContain('<customer>')
+    expect(response.text).toContain(`<name>${customer.name}</name>`)
+    expect(response.text).toContain('<address>')
+    expect(response.text).toContain(
+      `<street>${customer.address.street}</street>`
+    )
+    expect(response.text).toContain(
+      `<number>${customer.address.number}</number>`
+    )
+    expect(response.text).toContain(`<city>${customer.address.city}</city>`)
+    expect(response.text).toContain(`<zip>${customer.address.zip}</zip>`)
+    expect(response.text).toContain('</address>')
+    expect(response.text).toContain('</customer>')
+    expect(response.text).toContain('</customers>')
   })
 })

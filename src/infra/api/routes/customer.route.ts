@@ -3,6 +3,7 @@ import { CreateCustomerUseCase } from '../../../usecase/customer/create/create-c
 import { CustomerRepository } from '../../customer/repository/squelize/customer.repository'
 import { InputCreateCustomerDto } from '../../../usecase/customer/create/create-customer.dto'
 import { ListCustomerUseCase } from '../../../usecase/customer/list/list-customer.usecase'
+import { CustomerPresenter } from '../presenters/customer.presenter'
 
 export const customerRoute = Router()
 
@@ -32,7 +33,10 @@ customerRoute.get('/', async (_: Request, res: Response) => {
     const customerRepository = new CustomerRepository()
     const listCustomerUseCase = new ListCustomerUseCase(customerRepository)
     const output = await listCustomerUseCase.execute({})
-    res.status(200).send(output)
+    res.format({
+      json: () => res.status(200).send(output),
+      xml: () => res.status(200).send(CustomerPresenter.toXML(output)),
+    })
   } catch (error) {
     res.status(400).send(error)
   }
